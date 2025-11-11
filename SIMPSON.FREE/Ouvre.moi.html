@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>France.Simpson.Free🍩🍺📺👨‍👩‍👧‍👦💛V1.0</title>
+    <style>
+        /* CSS: Style Dark Mode  */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        h1 {
+            color: #0099ff;
+            width: 100%;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        /* Conteneurs Principal et Playlist */
+        .main-content {
+            flex: 3;
+            min-width: 60%;
+        }
+        .playlist-sidebar {
+            flex: 1;
+            min-width: 300px;
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            height: fit-content;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .playlist-sidebar h3 {
+            color: #0099ff;
+            margin-top: 0;
+        }
+        .playlist-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .playlist-sidebar li {
+            padding: 12px;
+            margin-bottom: 5px;
+            background-color: #3a3a3a;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-left 0.2s;
+            border-left: 4px solid transparent;
+            font-weight: bold;
+        }
+        .playlist-sidebar li:hover {
+            background-color: #4a4a4a;
+            border-left-color: #0099ff;
+        }
+        .playlist-sidebar li.active {
+            border-left-color: #0099ff;
+            background-color: #0099ff30; /* Arrière-plan légèrement bleu */
+        }
+
+        /* Lecteur Vidéo */
+        .video-player {
+            position: relative;
+            padding-bottom: 56.25%; /* Ratio 16:9 */
+            height: 0;
+            overflow: hidden;
+            background-color: black;
+            border-radius: 8px;
+        }
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Nouveau style pour le pied de page */
+        .footer-info {
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px auto 20px auto; /* Ajout d'une marge supérieure pour séparer du contenu principal */
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            border-top: 2px solid #333;
+        }
+        .footer-info p {
+            line-height: 1.6;
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        .footer-info a {
+            color: #0099ff;
+            text-decoration: none;
+        }
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>France.Simpson.Free🍩🍺📺👨‍👩‍👧‍👦💛V1.0.0.0</h1>
+        
+        <div class="main-content">
+            <h2 id="currentVideoTitle">Chargement...</h2>
+            <div class="video-player">
+                <iframe 
+                    id="videoEmbedFrame"
+                    src="" 
+                    title="Lecteur Vidéo Intégré" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div class="playlist-sidebar">
+            <h3>Liste de Lecture</h3>
+            <ul id="videoList">
+            </ul>
+            <p style="font-size: 0.8em; color: #aaa; margin-top: 15px;">*Pour ajouter de nouveaux épisodes, le fichier .html doit être mis à jour et redistribué.</p>
+        </div>
+        
+    </div>
+
+    <div class="footer-info">
+        <p>
+            **✅ Avantages :** 100% gratuit, Sans risque (de virus etc.), Mise à jour chaque dimanche de chaque semaine.
+        </p>
+        <p>
+            **⛔ Petit inconvénient :** Mise à jour manuelle.
+        </p>
+        <p>
+            **🔹 Alternatives payantes :** <a href="https://www.amazon.fr/" target="_blank">amazon.fr</a>, <a href="https://www.disneyplus.com/" target="_blank">disneyplus.com</a>, <a href="https://tv.apple.com/" target="_blank">tv.apple.com</a>.
+        </p>
+        <p>
+            **🔑 Système de clé pour la saison 30 :** (pour gérer l'accès à plus d'épisodes).
+        </p>
+        <p>
+            **🎥 Alternative au système de clé :** regarder des pubs (non disponible pour le moment).
+        </p>
+    </div>
+    <script>
+        // **********************************************************************************
+        // !!! ZONE À MODIFIER PAR LE CRÉATEUR POUR CHAQUE MISE À JOUR (VOTRE BASE DE DONNÉES) !!!
+        // **********************************************************************************
+        
+        // Structure de données : [ ID Sibnet, "Titre à afficher" ]
+        // ID Sibnet est le numéro que vous extrayez de l'URL.
+        const DATABASE_PLAYLIST = [
+            // SÉRIE 1: Les Simpson
+            ["5457875", "Les Simpson - S01 E01 : Une soirée d'enfer"],
+            ["5457957", "Les Simpson - S01 E02 : Bart le Génie"],
+            // SÉRIE 2: Film d'Action
+            ["5457876", "Les Simpson - S01 E03"],
+            ["5457879", "Les Simpson - S01 E04"],
+            // ... Ajoutez autant de lignes que vous voulez !
+        ];
+
+        // **********************************************************************************
+        // 
+        // **********************************************************************************
+
+        // Fonction utilitaire
+        function getEmbedUrl(videoId) {
+            return `https://video.sibnet.ru/shell.php?videoid=${videoId}`;
+        }
+
+        // DOM Elements
+        const player = document.getElementById('videoEmbedFrame');
+        const listContainer = document.getElementById('videoList');
+        const titleDisplay = document.getElementById('currentVideoTitle');
+
+        // **********************************************
+        // 1. RENDU DE LA PLAYLIST
+        // **********************************************
+        function renderPlaylist() {
+            listContainer.innerHTML = '';
+            
+            DATABASE_PLAYLIST.forEach((videoData, index) => {
+                const videoId = videoData[0];
+                const videoTitle = videoData[1];
+                
+                const listItem = document.createElement('li');
+                listItem.textContent = videoTitle;
+                listItem.dataset.videoId = videoId;
+                
+                // Gérer le clic pour lire la vidéo
+                listItem.addEventListener('click', () => {
+                    loadVideo(videoId, videoTitle, listItem);
+                });
+                
+                listContainer.appendChild(listItem);
+            });
+            
+            // Charger la première vidéo au démarrage
+            if (DATABASE_PLAYLIST.length > 0) {
+                const firstVideo = DATABASE_PLAYLIST[0];
+                const firstElement = listContainer.firstChild;
+                loadVideo(firstVideo[0], firstVideo[1], firstElement);
+            }
+        }
+
+        // **********************************************
+        // 2. LOGIQUE DE CHARGEMENT DU LECTEUR
+        // **********************************************
+        function loadVideo(videoId, videoTitle, listItem) {
+            player.src = getEmbedUrl(videoId);
+            titleDisplay.textContent = videoTitle;
+            
+            // Gérer la classe 'active'
+            document.querySelectorAll('#videoList li').forEach(li => li.classList.remove('active'));
+            if (listItem) {
+                listItem.classList.add('active');
+            }
+        }
+
+        // Initialisation : générer la playlist au chargement de la page
+        renderPlaylist();
+    </script>
+
+</body>
+</html>
